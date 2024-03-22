@@ -18,7 +18,7 @@ from src.guard import Guard
 def run_gui() -> None:
     _render_sidebar()
     # Get Input URL
-    url: str = st.text_input("Enter URL to PDF to analyze:")
+    url: str = st.text_input("Enter URL to PDF to analyze:", placeholder="URL to the cohort PDF ...")
 
     if len(url) == 0:
         st.info("Please enter the URL to the PDF document that you'd like to analyze.\n\n" +
@@ -93,8 +93,8 @@ def _display_stats(df, dataloader) -> None:
     std = np.sqrt(variance)
 
     col1.metric(label="Number of Graduates", value=sum(df["Anzahl"]))
-    col2.metric(label="Mean", value=np.round(mean, 4))
-    col3.metric(label="Standard Deviation", value=np.round(std, 4))
+    col2.metric(label="Mean", value=np.round(mean, 2))
+    col3.metric(label="Standard Deviation", value=np.round(std, 2))
 
 
 def _render_sidebar() -> None:
