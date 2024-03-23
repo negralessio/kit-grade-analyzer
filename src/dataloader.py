@@ -7,7 +7,7 @@ from typing import Optional
 class DataLoader:
 
     def __init__(self, url: str):
-        self.url: str = url
+        self.url: str = url.strip()
         self.study: str = None
         self.df = None
 
