@@ -8,6 +8,8 @@ import plotly.express as px
 import plotly.graph_objects as go
 import numpy as np
 
+from urllib.error import HTTPError
+
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 warnings.simplefilter(action='ignore', category=FutureWarning)
 st.set_page_config(layout="wide")
@@ -25,11 +27,15 @@ def run_gui() -> None:
     input_txt: str = st.text_input("Enter one or more URL to PDF to analyze:", placeholder="URL(s) to the cohort PDF ...")
 
     if len(input_txt) == 0:
-        st.info("Please enter the URL to the PDF document that you'd like to analyze.\n\n" +
-                "You can find the " +
-                "ECTS Ranking Charts here: \n\n  https://www.sle.kit.edu/nachstudium/ects-einstufungstabellen.php" +
-                f"\n\nNote that you can add two or more URLs to the field, but seperate it using '{constants.SEP}'",
-                icon="ℹ️")
+        st.markdown(f"""
+        ## 👋 Hi and welcome to the Unofficial KIT Grade Analyzer  
+        **How To Use**  
+        - Please enter one or more URL to the PDF document that you'd like to analyze
+        - If you are using multiple URLs, please separate them using Seperator Token '\$', e.g. `<URL1>$<URL2>`
+        - You can find the ECTS Ranking Chart here: `https://www.sle.kit.edu/nachstudium/ects-einstufungstabellen.php`  
+            - Simply click on your cohort and copy the URL to your pdf
+            - Note that this Data App only works with never versions of the Ranking (i.e. the ones with the cumulative column)
+        """)
         return
 
     url_list: list[str] = utils.separate_input_string(input_txt, sep=constants.SEP)
@@ -66,6 +72,8 @@ def run_gui() -> None:
                 _raw_data_view(df_list, cohort_list)
     except IndexError:
         st.error("Please try a different URL.", icon="⚠️")
+    except HTTPError:
+        st.error("HTTPError: Please try a different URL.", icon="⚠️")
 
 
 def _bar_plot_view(df_list, cohort_list) -> None:
@@ -100,7 +108,6 @@ def _cdf_view(df_list, cohort_list) -> None:
 
 
 def _raw_data_view(df_list, cohort_list) -> None:
-    N = len(df_list)
     col1, col2 = st.columns(2)
 
     for i, (df, cohort) in enumerate(zip(df_list, cohort_list)):
