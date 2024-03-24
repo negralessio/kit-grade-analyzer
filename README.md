@@ -28,7 +28,7 @@ Cohort analysis and comparison of final graduates grades at KIT.
 4. Install the required packages by running the following command in your terminal:
 
    ```
-   pip install -r conf/requirements.txt
+   pip install -r requirements.txt
    ```
 
 # How To Run:
