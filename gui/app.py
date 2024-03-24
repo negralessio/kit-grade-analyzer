@@ -4,7 +4,6 @@ import warnings
 import time
 
 import streamlit as st
-import plotly.express as px
 import plotly.graph_objects as go
 import numpy as np
 
@@ -40,7 +39,7 @@ def run_gui() -> None:
 
     url_list: list[str] = utils.separate_input_string(input_txt, sep=constants.SEP)
 
-    # Check input for validity and safety
+    # Check each input url for validity and safety
     for url in url_list:
         if not Guard(url).check_input():
             st.error("Please try a different URL.", icon="⚠️")
@@ -60,15 +59,17 @@ def run_gui() -> None:
                     df_list.append(df)
                     cohort_list.append(dataloader.get_study())
 
-            tab1, tab2, tab3 = st.tabs(
-                ["View Bar Plot", "View Cumulative Distribution (CDF)", "View Raw Data"]
+            tab1, tab2, tab3, tab4 = st.tabs(
+                ["View Bar Plot", "View Normalized Bar Plot", "View Cumulative Distribution (CDF)", "View Raw Data"]
             )
 
             with tab1:
                 _bar_plot_view(df_list, cohort_list)
             with tab2:
-                _cdf_view(df_list, cohort_list)
+                _bar_plot_normalized_view(df_list, cohort_list)
             with tab3:
+                _cdf_view(df_list, cohort_list)
+            with tab4:
                 _raw_data_view(df_list, cohort_list)
     except IndexError:
         st.error("Please try a different URL.", icon="⚠️")
@@ -77,10 +78,7 @@ def run_gui() -> None:
 
 
 def _bar_plot_view(df_list, cohort_list) -> None:
-    # View Stats
-    if len(df_list) == 1:
-        _display_stats(df_list[0], cohort_list[0])
-
+    # Bar Plot Settings
     fig = go.Figure()
     for df, cohort in zip(df_list, cohort_list):
         fig.add_trace(go.Bar(x=df["Note"], y=df["Anzahl"], name=cohort))
@@ -89,13 +87,26 @@ def _bar_plot_view(df_list, cohort_list) -> None:
     fig.update_layout(legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1))
     st.plotly_chart(fig, use_container_width=True)
 
+    # View Stats
+    _display_stats(df_list, cohort_list)
 
-def _cdf_view(df_list, cohort_list) -> None:
+
+def _bar_plot_normalized_view(df_list, cohort_list) -> None:
+    # Bar Plot Settings
+    fig = go.Figure()
+    for df, cohort in zip(df_list, cohort_list):
+        fig.add_trace(go.Bar(x=df["Note"], y=df["Prozent"], name=cohort))
+    fig.update_xaxes(tickvals=[i / 10 for i in range(10, 41)], ticktext=[str(i / 10) for i in range(10, 41)])
+    fig.update_layout(title='Normalized Grade Distribution', xaxis_title='Grade', yaxis_title='Percent [%]')
+    fig.update_layout(legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1))
+    st.plotly_chart(fig, use_container_width=True)
 
     # View Stats
-    if len(df_list) == 1:
-        _display_stats(df_list[0], cohort_list[0])
+    _display_stats(df_list, cohort_list)
 
+
+def _cdf_view(df_list, cohort_list) -> None:
+    # CDF Plot Settings
     fig = go.Figure()
     for df, cohort in zip(df_list, cohort_list):
         fig.add_trace(go.Line(x=df["Note"], y=df["Kumuliert"], name=cohort))
@@ -106,32 +117,36 @@ def _cdf_view(df_list, cohort_list) -> None:
     fig.add_hline(y=50, annotation_text="Median", line_dash="dot", line_color="red")
     st.plotly_chart(fig, use_container_width=True)
 
+    # View Stats
+    _display_stats(df_list, cohort_list)
+
 
 def _raw_data_view(df_list, cohort_list) -> None:
     col1, col2 = st.columns(2)
 
     for i, (df, cohort) in enumerate(zip(df_list, cohort_list)):
         if i % 2 == 0:
-            col1.subheader(body=f"{cohort}", divider="blue")
+            col1.subheader(body=f"{cohort}", divider=constants.COL_DIVIDER)
             col1.dataframe(df)
         else:
-            col2.subheader(body=f"{cohort}", divider="blue")
+            col2.subheader(body=f"{cohort}", divider=constants.COL_DIVIDER)
             col2.dataframe(df)
 
 
 
-def _display_stats(df, cohort) -> None:
+def _display_stats(df_list, cohort_list) -> None:
 
-    st.metric(label="Cohort", value=cohort)
-    col1, col2, col3 = st.columns(3)
-    # Display Stats
-    mean = np.average(df['Note'], weights=df['Anzahl'])
-    variance = np.average((df['Note'] - mean) ** 2, weights=df['Anzahl'])
-    std = np.sqrt(variance)
+    for df, cohort in zip(df_list, cohort_list):
+        st.subheader(body=f"{cohort}", divider=constants.COL_DIVIDER)
+        col1, col2, col3 = st.columns(3)
+        # Display Stats
+        mean = np.average(df['Note'], weights=df['Anzahl'])
+        variance = np.average((df['Note'] - mean) ** 2, weights=df['Anzahl'])
+        std = np.sqrt(variance)
 
-    col1.metric(label="Number of Graduates", value=sum(df["Anzahl"]))
-    col2.metric(label="Mean", value=np.round(mean, 2))
-    col3.metric(label="Standard Deviation", value=np.round(std, 2))
+        col1.metric(label="Number of Graduates", value=sum(df["Anzahl"]))
+        col2.metric(label="Mean", value=np.round(mean, 2))
+        col3.metric(label="Standard Deviation", value=np.round(std, 2))
 
 
 def _render_sidebar() -> None:
@@ -146,7 +161,8 @@ def _render_sidebar() -> None:
             - Only works with the german version and with the newer version of the documents (i.e. the ones
             with the cumulative column)
             - Example URL would be 
-            `https://www.sle.kit.edu/dokumente/ects-tabellen//ECTS_Tab_WS23_24_MA_Informatik_DE.pdf`
+            `https://www.sle.kit.edu/dokumente/ects-tabellen//ECTS_Tab_WS23_24_MA_Informatik_DE.pdf`  
+            - To compare two or more cohorts, simply add them into the text field separated by '$'
 
             ___
             *Made by Alessio Negrini*  
