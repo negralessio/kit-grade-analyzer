@@ -4,7 +4,7 @@ Cohort analysis and comparison of final graduates grades at KIT.
 # Example Preview
 ![](assets/readme/ui_example.png)
 
-# Install and Running
+# Installation
 
 1. Clone the repository by running the following command in your terminal:
 
@@ -31,9 +31,11 @@ Cohort analysis and comparison of final graduates grades at KIT.
    pip install -r conf/requirements.txt
    ```
 
-5. Run GUI via
+# How To Run:
+1. Run GUI, while in root dir, via:
 
    ```
    streamlit run gui/app.py
    ```
-   
+
+2. Simply add one or more URL into the corresponding text field.
