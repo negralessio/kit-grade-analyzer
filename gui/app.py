@@ -6,6 +6,7 @@ import time
 import streamlit as st
 import plotly.graph_objects as go
 import numpy as np
+import pandas as pd
 
 from urllib.error import HTTPError
 
@@ -23,7 +24,8 @@ import src.constants as constants
 def run_gui() -> None:
     _render_sidebar()
     # Get Input URL
-    input_txt: str = st.text_input("Enter one or more URL to PDF to analyze:", placeholder="URL(s) to the cohort PDF ...")
+    input_txt: str = st.text_input("Enter one or more URL(s) to PDF to analyze:",
+                                   placeholder="URL(s) to the cohort PDF ...")
 
     if len(input_txt) == 0:
         st.markdown(f"""
@@ -77,7 +79,7 @@ def run_gui() -> None:
         st.error("HTTPError: Please try a different URL.", icon="⚠️")
 
 
-def _bar_plot_view(df_list, cohort_list) -> None:
+def _bar_plot_view(df_list: list[pd.DataFrame], cohort_list: list[str]) -> None:
     # Bar Plot Settings
     fig = go.Figure()
     for df, cohort in zip(df_list, cohort_list):
@@ -91,7 +93,7 @@ def _bar_plot_view(df_list, cohort_list) -> None:
     _display_stats(df_list, cohort_list)
 
 
-def _bar_plot_normalized_view(df_list, cohort_list) -> None:
+def _bar_plot_normalized_view(df_list: list[pd.DataFrame], cohort_list: list[str]) -> None:
     # Bar Plot Settings
     fig = go.Figure()
     for df, cohort in zip(df_list, cohort_list):
@@ -105,7 +107,7 @@ def _bar_plot_normalized_view(df_list, cohort_list) -> None:
     _display_stats(df_list, cohort_list)
 
 
-def _cdf_view(df_list, cohort_list) -> None:
+def _cdf_view(df_list: list[pd.DataFrame], cohort_list: list[str]) -> None:
     # CDF Plot Settings
     fig = go.Figure()
     for df, cohort in zip(df_list, cohort_list):
@@ -121,7 +123,7 @@ def _cdf_view(df_list, cohort_list) -> None:
     _display_stats(df_list, cohort_list)
 
 
-def _raw_data_view(df_list, cohort_list) -> None:
+def _raw_data_view(df_list: list[pd.DataFrame], cohort_list: list[str]) -> None:
     col1, col2 = st.columns(2)
 
     for i, (df, cohort) in enumerate(zip(df_list, cohort_list)):
@@ -134,16 +136,18 @@ def _raw_data_view(df_list, cohort_list) -> None:
 
 
 
-def _display_stats(df_list, cohort_list) -> None:
+def _display_stats(df_list: list[pd.DataFrame], cohort_list: list[str]) -> None:
 
     for df, cohort in zip(df_list, cohort_list):
         st.subheader(body=f"{cohort}", divider=constants.COL_DIVIDER)
         col1, col2, col3 = st.columns(3)
-        # Display Stats
+
+        # Compute Stats
         mean = np.average(df['Note'], weights=df['Anzahl'])
         variance = np.average((df['Note'] - mean) ** 2, weights=df['Anzahl'])
         std = np.sqrt(variance)
 
+        # Display Stats
         col1.metric(label="Number of Graduates", value=sum(df["Anzahl"]))
         col2.metric(label="Mean", value=np.round(mean, 2))
         col3.metric(label="Standard Deviation", value=np.round(std, 2))
@@ -166,6 +170,7 @@ def _render_sidebar() -> None:
 
             ___
             *Made by Alessio Negrini*  
+            *Contact: Alessio(d0t|]Negrini[at)live.de*
             *Version 0.1, March 2024*
         """)
 
