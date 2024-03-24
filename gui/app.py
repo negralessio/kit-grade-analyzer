@@ -22,6 +22,9 @@ import src.constants as constants
 
 
 def run_gui() -> None:
+    """
+    Entry point to the streamlit GUI
+    """
     _render_sidebar()
     # Get Input URL
     input_txt: str = st.text_input("Enter one or more URL(s) to PDF to analyze:",
@@ -80,6 +83,12 @@ def run_gui() -> None:
 
 
 def _bar_plot_view(df_list: list[pd.DataFrame], cohort_list: list[str]) -> None:
+    """
+    Renders the Bar Plot View.
+    :param df_list: list[pd.DataFrame] -- List of parsed pandas DataFrames
+    :param cohort_list: list[str] -- List of the cohort names
+    :return: None
+    """
     # Bar Plot Settings
     fig = go.Figure()
     for df, cohort in zip(df_list, cohort_list):
@@ -94,7 +103,12 @@ def _bar_plot_view(df_list: list[pd.DataFrame], cohort_list: list[str]) -> None:
 
 
 def _bar_plot_normalized_view(df_list: list[pd.DataFrame], cohort_list: list[str]) -> None:
-    # Bar Plot Settings
+    """
+    Renders the Normalized Bar Plot View.
+    :param df_list: list[pd.DataFrame] -- List of parsed pandas DataFrames
+    :param cohort_list: list[str] -- List of the cohort names
+    :return: None
+    """
     fig = go.Figure()
     for df, cohort in zip(df_list, cohort_list):
         fig.add_trace(go.Bar(x=df["Note"], y=df["Prozent"], name=cohort))
@@ -108,7 +122,12 @@ def _bar_plot_normalized_view(df_list: list[pd.DataFrame], cohort_list: list[str
 
 
 def _cdf_view(df_list: list[pd.DataFrame], cohort_list: list[str]) -> None:
-    # CDF Plot Settings
+    """
+    Renders the Cumulative Distribution Function (CDF) View
+    :param df_list: list[pd.DataFrame] -- List of parsed pandas DataFrames
+    :param cohort_list: list[str] -- List of the cohort names
+    :return: None
+    """
     fig = go.Figure()
     for df, cohort in zip(df_list, cohort_list):
         fig.add_trace(go.Line(x=df["Note"], y=df["Kumuliert"], name=cohort))
@@ -124,6 +143,12 @@ def _cdf_view(df_list: list[pd.DataFrame], cohort_list: list[str]) -> None:
 
 
 def _raw_data_view(df_list: list[pd.DataFrame], cohort_list: list[str]) -> None:
+    """
+    Displays the raw data (i.e. the DataFrame)
+    :param df_list: list[pd.DataFrame] -- List of parsed pandas DataFrames
+    :param cohort_list: list[str] -- List of the cohort names
+    :return: None
+    """
     col1, col2 = st.columns(2)
 
     for i, (df, cohort) in enumerate(zip(df_list, cohort_list)):
@@ -137,7 +162,12 @@ def _raw_data_view(df_list: list[pd.DataFrame], cohort_list: list[str]) -> None:
 
 
 def _display_stats(df_list: list[pd.DataFrame], cohort_list: list[str]) -> None:
-
+    """
+    Computes and displays descriptive statistics about the dataframe(s)
+    :param df_list: list[pd.DataFrame] -- List of parsed pandas DataFrames
+    :param cohort_list: list[str] -- List of the cohort names
+    :return: None
+    """
     for df, cohort in zip(df_list, cohort_list):
         st.subheader(body=f"{cohort}", divider=constants.COL_DIVIDER)
         col1, col2, col3 = st.columns(3)
@@ -154,6 +184,9 @@ def _display_stats(df_list: list[pd.DataFrame], cohort_list: list[str]) -> None:
 
 
 def _render_sidebar() -> None:
+    """
+    Simply renders and displays the sidebar content.
+    """
     with st.sidebar:
         st.image("assets/Logo_KIT.svg-2.png")
         st.write("""
