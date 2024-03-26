@@ -53,7 +53,7 @@ def run_gui() -> None:
     # Get Data and perform Analysis
     try:
         if st.button("Analyze 🚀", type="primary"):
-            with st.spinner("Crawling and Preprocessing Data ..."):
+            with st.spinner("Crawling and processing data ..."):
                 df_list = []
                 cohort_list = []
                 for url in url_list:
