@@ -1,5 +1,12 @@
+This tool is currently deployed on the streamlit community cloud and can be accessed via ...
+```
+https://kit-grade-analyzer.streamlit.app
+```
+
 # About the Project
-Cohort analysis and comparison of final graduates grades at KIT.
+Cohort analysis and comparison of final graduates grades at KIT.  
+Uses and aggregates / analyzes the final KIT grades published at the 
+[KIT ECTS Ranking Chart](https://www.sle.kit.edu/nachstudium/ects-einstufungstabellen.php).
 
 # Example Preview
 ![](assets/readme/ui_example.png)
