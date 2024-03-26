@@ -28,18 +28,14 @@ def run_gui() -> None:
     _render_sidebar()
     # Get Input URL
     input_txt: str = st.text_input("Enter one or more URL(s) to PDF to analyze:",
-                                   placeholder="URL(s) to the cohort PDF ...")
+                                   placeholder="https://www.sle.kit.edu/dokumente/ects-tabellen//ECTS_Tab_WS23_24_MA_Informatik_DE.pdf",
+                                   max_chars=4096,
+                                   help="You can enter one or more URL(s) to the PDF, but if more than one, it "
+                                        f"has to be seperated be '{constants.SEP}'. \n\n"
+                                        f"For example: <URL1>\{constants.SEP}<URL2>\{constants.SEP}<URL3>")
 
     if len(input_txt) == 0:
-        st.markdown(f"""
-        ## 👋 Hi and welcome to the Unofficial KIT Grade Analyzer  
-        **How To Use**  
-        - Please enter one or more URL to the PDF document that you'd like to analyze
-        - If you are using multiple URLs, please separate them using Seperator Token '\$', e.g. `<URL1>$<URL2>`
-        - You can find the ECTS Ranking Chart here: `https://www.sle.kit.edu/nachstudium/ects-einstufungstabellen.php`  
-            - Simply click on your cohort and copy the URL to your pdf
-            - Note that this Data App only works with never versions of the Ranking (i.e. the ones with the cumulative column)
-        """)
+        _view_intro_text()
         return
 
     url_list: list[str] = utils.separate_input_string(input_txt, sep=constants.SEP)
@@ -209,6 +205,21 @@ def _render_sidebar() -> None:
             *Contact: Alessio(d0t|]Negrini[at)live.de*
             *Version 0.1, March 2024*
         """)
+
+
+def _view_intro_text() -> None:
+    """
+    Simply displays the introduction text
+    """
+    st.markdown(f"""
+            ## 👋 Hi and welcome to the Unofficial KIT Grade Analyzer  
+            **How To Use**  
+            - Please enter one or more URL to the PDF document that you'd like to analyze
+            - If you are using multiple URLs, please separate them using Seperator Token '\$', e.g. `<URL1>$<URL2>`
+            - You can find the ECTS Ranking Chart here: `https://www.sle.kit.edu/nachstudium/ects-einstufungstabellen.php`  
+                - Simply click on your cohort and copy the URL to your pdf
+                - Note that this Data App only works with never versions of the Ranking (i.e. the ones with the cumulative column)
+            """)
 
 
 run_gui()
