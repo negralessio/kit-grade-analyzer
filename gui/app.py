@@ -80,6 +80,9 @@ def run_gui() -> None:
         st.error("Please try a different URL.", icon="⚠️")
     except HTTPError:
         st.error("HTTPError: Please try a different URL.", icon="⚠️")
+    except KeyError:
+        st.error("KeyError: Please try a different URL. "
+                 "Make sure that you are using the newer version of the PDFs", icon="⚠️")
 
 
 def _bar_plot_view(df_list: list[pd.DataFrame], cohort_list: list[str]) -> None:
