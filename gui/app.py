@@ -12,7 +12,7 @@ from urllib.error import HTTPError
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 warnings.simplefilter(action='ignore', category=FutureWarning)
-st.set_page_config(layout="wide")
+st.set_page_config(page_title="KIT Grade Analyzer", layout="wide", page_icon="🎓")
 
 from src.dataloader import DataLoader
 from src.guard import Guard
