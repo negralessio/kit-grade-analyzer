@@ -8,7 +8,7 @@ class DataLoader:
 
     def __init__(self, url: str):
         self.url: str = url.strip()
-        self.study: str = None
+        self.study = None
         self.df = None
 
         self._set_study()
