@@ -30,7 +30,7 @@ class DataLoader:
             raise ValueError("Call 'load_data()' first.")
 
     def _set_study(self):
-        self.study = self.url.split("//ECTS_Tab_")[1].split(".pdf")[0]
+        self.study = self.url.split("ECTS_Tab_")[1].split(".pdf")[0]
 
     def get_study(self) -> Optional[str]:
         if self.study is not None:
