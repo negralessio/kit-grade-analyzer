@@ -1,5 +1,5 @@
 # Server on which PDF document lies
-HOST: str = "https://www.sle.kit.edu"
+HOST = "https://www.sle.kit.edu"
 
 # Separator Token
 SEP = "$"
