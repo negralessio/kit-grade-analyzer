@@ -1,3 +1,5 @@
+import logging
+
 # Server on which PDF document lies
 HOST = "https://www.sle.kit.edu"
 
@@ -6,3 +8,6 @@ SEP = "$"
 
 # Divider Color
 COL_DIVIDER = "blue"
+
+# Logging Level
+LOGLEVEL = logging.INFO

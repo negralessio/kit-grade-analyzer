@@ -3,6 +3,7 @@ import sys
 import os
 import warnings
 import time
+import logging
 import streamlit as st
 
 from urllib.error import HTTPError
@@ -19,6 +20,9 @@ import src.constants as constants
 import src.text as text
 
 import gui.visualizations as visualizations
+
+utils.setup_logging(loglevel=constants.LOGLEVEL)
+logger = logging.getLogger(__name__)
 
 
 def run_gui() -> None:
