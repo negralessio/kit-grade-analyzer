@@ -11,6 +11,7 @@ class Guard:
         self.url = url
 
     def check_input(self) -> bool:
+        logger.debug("Checking user input via Guard Class ...")
         if self._check_if_url_starts_correctly():
             return True
         else:
