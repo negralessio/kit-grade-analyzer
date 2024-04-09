@@ -20,7 +20,7 @@ def df_should():
 @pytest.fixture
 def dataloader():
     warnings.simplefilter(action='ignore', category=FutureWarning)
-    return DataLoader("tests/assets/::ECTS_Tab_WS23_24_BA_TEST_DE.pdf")
+    return DataLoader("tests/assets/ECTS_Tab_WS23_24_BA_TEST_DE.pdf")
 
 
 def test_load_data_return_correct_df(dataloader, df_should):
