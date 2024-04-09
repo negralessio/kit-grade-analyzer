@@ -21,7 +21,7 @@ import src.text as text
 
 import gui.visualizations as visualizations
 
-utils.setup_logging(loglevel=constants.loglevel)
+utils.setup_logging(loglevel=constants.LOGLEVEL)
 logger = logging.getLogger(__name__)
 
 

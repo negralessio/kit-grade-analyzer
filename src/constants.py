@@ -10,4 +10,4 @@ SEP = "$"
 COL_DIVIDER = "blue"
 
 # Logging Level
-loglevel = logging.INFO
+LOGLEVEL = logging.INFO
