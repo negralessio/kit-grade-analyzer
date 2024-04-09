@@ -1,5 +1,8 @@
 """ Module to clean and validate input url """
+import logging
 import src.constants as constants
+
+logger = logging.getLogger(__name__)
 
 
 class Guard:

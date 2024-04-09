@@ -1,10 +1,13 @@
 """ Module that handles the visualization / plotly plots"""
+import logging
 import pandas as pd
 import numpy as np
 import streamlit as st
 import plotly.graph_objects as go
 
 import src.constants as constants
+
+logger = logging.getLogger(__name__)
 
 
 def bar_plot_view(df_list: list[pd.DataFrame], cohort_list: list[str]) -> None:
@@ -92,6 +95,7 @@ def _display_stats(df_list: list[pd.DataFrame], cohort_list: list[str]) -> None:
     :param cohort_list: list[str] -- List of the cohort names
     :return: None
     """
+    logger.info("Computing stats ...")
     for df, cohort in zip(df_list, cohort_list):
         st.subheader(body=f"{cohort}", divider=constants.COL_DIVIDER)
         col1, col2, col3 = st.columns(3)

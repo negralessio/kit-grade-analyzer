@@ -1,7 +1,10 @@
 import tabula
+import logging
 import pandas as pd
 
 from typing import Optional
+
+logger = logging.getLogger(__name__)
 
 
 class DataLoader:
