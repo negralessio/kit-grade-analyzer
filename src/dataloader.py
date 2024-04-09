@@ -17,11 +17,15 @@ class DataLoader:
         self._set_study()
 
     def load_data(self) -> None:
+        logger.debug("Reading PDF Doc for DataLoader object with URL: %s", self.url)
+
         df_list = tabula.read_pdf(self.url, pages='all')
         self.df = df_list[0].iloc[:, 1:]
         self._preprocess_df()
 
     def _preprocess_df(self) -> None:
+        logger.debug("Preprocessing for DataLoader object with URL: %s", self.url)
+
         self.df["Note"] = self.df["Note"].str.replace(',', '.').astype(float)
         self.df["Prozent"] = self.df["Prozent"].str.replace(',', '.').astype(float)
         self.df["Kumuliert"] = self.df["Kumuliert"].str.replace(',', '.').astype(float)
@@ -33,6 +37,8 @@ class DataLoader:
             raise ValueError("Call 'load_data()' first.")
 
     def _set_study(self):
+        logger.debug("Set study for DataLoader object with URL: %s", self.url)
+
         self.study = self.url.split("ECTS_Tab_")[1].split(".pdf")[0]
 
     def get_study(self) -> Optional[str]:

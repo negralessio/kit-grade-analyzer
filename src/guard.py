@@ -17,4 +17,5 @@ class Guard:
             return False
 
     def _check_if_url_starts_correctly(self) -> bool:
+        logger.debug("Checking if URL starts correctly of Guard with URL: %s", self.url)
         return self.url.startswith(constants.HOST)
