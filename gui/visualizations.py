@@ -95,7 +95,6 @@ def _display_stats(df_list: list[pd.DataFrame], cohort_list: list[str]) -> None:
     :param cohort_list: list[str] -- List of the cohort names
     :return: None
     """
-    logger.info("Computing stats ...")
     for df, cohort in zip(df_list, cohort_list):
         st.subheader(body=f"{cohort}", divider=constants.COL_DIVIDER)
         col1, col2, col3 = st.columns(3)
