@@ -38,6 +38,11 @@ Uses and aggregates / analyzes the final KIT grades published at the
    pip install -r requirements.txt
    ```
 
+5. (Optional). Install pre-commit to help adhering to code styles and mitigating minor issues
+   ```
+   pre-commit install
+   ```
+
 # How To Run:
 1. Run GUI, while in root dir, via:
 
