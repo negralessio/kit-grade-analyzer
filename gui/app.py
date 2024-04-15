@@ -1,4 +1,5 @@
 """ Module that handles the entry point of the streamlit GUI """
+
 import sys
 import os
 import warnings
@@ -8,8 +9,8 @@ import streamlit as st
 
 from urllib.error import HTTPError
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-warnings.simplefilter(action='ignore', category=FutureWarning)
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+warnings.simplefilter(action="ignore", category=FutureWarning)
 st.set_page_config(page_title="KIT Grade Analyzer", layout="wide", page_icon="🎓")
 
 from src.dataloader import DataLoader
@@ -31,12 +32,14 @@ def run_gui() -> None:
     """
     _render_sidebar()
     # Get Input URL
-    input_txt: str = st.text_input("Enter one or more URL(s) to PDF to analyze:",
-                                   placeholder="https://www.sle.kit.edu/dokumente/ects-tabellen//ECTS_Tab_WS23_24_MA_Informatik_DE.pdf",
-                                   max_chars=4096,
-                                   help="You can enter one or more URL(s) to the PDF, but if more than one, it "
-                                        f"has to be seperated be '{constants.SEP}'. \n\n"
-                                        f"For example: <URL1>\{constants.SEP}<URL2>\{constants.SEP}<URL3>")
+    input_txt: str = st.text_input(
+        "Enter one or more URL(s) to PDF to analyze:",
+        placeholder="https://www.sle.kit.edu/dokumente/ects-tabellen//ECTS_Tab_WS23_24_MA_Informatik_DE.pdf",
+        max_chars=4096,
+        help="You can enter one or more URL(s) to the PDF, but if more than one, it "
+        f"has to be seperated be '{constants.SEP}'. \n\n"
+        f"For example: <URL1>\{constants.SEP}<URL2>\{constants.SEP}<URL3>",
+    )
 
     if len(input_txt) == 0:
         _render_intro_text()
@@ -65,7 +68,12 @@ def run_gui() -> None:
                     cohort_list.append(dataloader.get_study())
 
             tab1, tab2, tab3, tab4 = st.tabs(
-                ["View Bar Plot", "View Normalized Bar Plot", "View Cumulative Distribution (CDF)", "View Raw Data"]
+                [
+                    "View Bar Plot",
+                    "View Normalized Bar Plot",
+                    "View Cumulative Distribution (CDF)",
+                    "View Raw Data",
+                ]
             )
 
             with tab1:
@@ -79,10 +87,17 @@ def run_gui() -> None:
     except IndexError:
         st.error("Please try a different URL.", icon="⚠️")
     except HTTPError:
-        st.error("HTTPError: Please try a different URL.", icon="⚠️")
+        st.error(
+            "HTTPError: Please try a different URL.\nNote that if you add more than one URL, "
+            f"they have to be seperated using the '{constants.SEP}' token.",
+            icon="⚠️",
+        )
     except KeyError:
-        st.error("KeyError: Please try a different URL. "
-                 "Make sure that you are using the newer version of the PDFs", icon="⚠️")
+        st.error(
+            "KeyError: Please try a different URL.\n"
+            "Make sure that you are using the newer version of the PDFs.",
+            icon="⚠️",
+        )
 
 
 def _render_sidebar() -> None:
