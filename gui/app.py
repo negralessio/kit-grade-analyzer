@@ -37,11 +37,11 @@ def run_gui() -> None:
     study_dict: dict[str, str] = scraper.scrape_ects_chart(url=constants.URL_TO_CHART)
 
     # Display Multiselect widget
-    selected_studies: dict[str] = st.multiselect(label="Choose your field of study.",
+    selected_studies: list[str] = st.multiselect(label="Choose your field of study.",
                                                  options=list(study_dict.keys()),
-                                                 max_selections=8,
-                                                 help="You can select one or more studies to analyze starting from "
-                                                      "WS22/23")
+                                                 max_selections=constants.MAX_N_COHORTS,
+                                                 help=f"You can select up to {constants.MAX_N_COHORTS} cohorts"
+                                                      " to analyze starting from WS22/23.")
 
     # Match study (key of study_dict) with url (value of study_dict)
     url_list: list[str] = [study_dict[key] for key in selected_studies]

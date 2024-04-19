@@ -11,3 +11,7 @@ COL_DIVIDER = "blue"
 
 # Logging Level
 LOGLEVEL = logging.INFO
+
+# Maximum number of cohorts to select
+MAX_N_COHORTS = 8
+
