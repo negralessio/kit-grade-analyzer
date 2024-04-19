@@ -11,15 +11,3 @@ def setup_logging(loglevel=logging.INFO) -> None:
     logging.basicConfig(level=loglevel,
                         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                         datefmt="%Y-%m-%d %H:%M:%S")
-
-
-def separate_input_string(x: str, sep: str) -> list[str]:
-    """
-    Separates string based on separator token sep and returns list of strings.
-    E.g. "URL1$URL" --> ["URL1", "URL2"]
-
-    :param x: str -- Input String
-    :param sep: str -- Separator Token
-    :return: list[str]
-    """
-    return x.split(sep)
