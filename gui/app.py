@@ -19,6 +19,7 @@ from src.guard import Guard
 import src.utils as utils
 import src.constants as constants
 import src.text as text
+import src.scraper as scraper
 
 import gui.visualizations as visualizations
 
@@ -31,21 +32,19 @@ def run_gui() -> None:
     Entry point to the streamlit GUI
     """
     _render_sidebar()
-    # Get Input URL
-    input_txt: str = st.text_input(
-        "Enter one or more URL(s) to PDF to analyze:",
-        placeholder="https://www.sle.kit.edu/dokumente/ects-tabellen//ECTS_Tab_WS23_24_MA_Informatik_DE.pdf",
-        max_chars=4096,
-        help="You can enter one or more URL(s) to the PDF, but if more than one, it "
-        f"has to be seperated be '{constants.SEP}'. \n\n"
-        f"For example: <URL1>\{constants.SEP}<URL2>\{constants.SEP}<URL3>",
-    )
 
-    if len(input_txt) == 0:
-        _render_intro_text()
-        return
+    # First scrape all currently available studies
+    study_dict: dict[str, str] = scraper.scrape_ects_chart(url=constants.URL_TO_CHART)
 
-    url_list: list[str] = utils.separate_input_string(input_txt, sep=constants.SEP)
+    # Display Multiselect widget
+    selected_studies: dict[str] = st.multiselect(label="Choose your field of study.",
+                                                 options=list(study_dict.keys()),
+                                                 max_selections=8,
+                                                 help="You can select one or more studies to analyze starting from "
+                                                      "WS22/23")
+
+    # Match study (key of study_dict) with url (value of study_dict)
+    url_list: list[str] = [study_dict[key] for key in selected_studies]
 
     # Check each input url for validity and safety
     for url in url_list:
@@ -107,13 +106,6 @@ def _render_sidebar() -> None:
     with st.sidebar:
         st.image("assets/Logo_KIT.svg-2.png")
         st.write(text.SIDEBAR_CONTENT)
-
-
-def _render_intro_text() -> None:
-    """
-    Simply displays the introduction text
-    """
-    st.markdown(text.INTRO_CONTENT)
 
 
 run_gui()
