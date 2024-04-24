@@ -62,6 +62,7 @@ def cdf_view(df_list: list[pd.DataFrame], cohort_list: list[str]) -> None:
     fig.update_xaxes(tickvals=[i / 10 for i in range(10, 41)], ticktext=[str(i / 10) for i in range(10, 41)])
     fig.update_layout(title='Cumulative Distribution Function (CDF)', xaxis_title='Grade', yaxis_title='Cumulative [%]')
     fig.update_layout(legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1))
+    fig.update_layout(hovermode="x unified")
     fig.add_hline(y=10, annotation_text="Top 10%", line_dash="dot", line_color="red")
     fig.add_hline(y=50, annotation_text="Median", line_dash="dot", line_color="red")
     st.plotly_chart(fig, use_container_width=True)
